@@ -22,10 +22,10 @@ import com.facebook.presto.operator.aggregation.ApproximateDoubleTDigestPercenti
 import com.facebook.presto.operator.aggregation.ApproximateLongPercentileAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateLongPercentileArrayAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateLongTDigestPercentileAggregations;
+import com.facebook.presto.operator.aggregation.ApproximateLongTDigestPercentileArrayAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateRealPercentileAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateRealPercentileArrayAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateSetAggregation;
-import com.facebook.presto.operator.aggregation.ApproximateLongTDigestPercentileArrayAggregations;
 import com.facebook.presto.operator.aggregation.ArrayAggregationFunction;
 import com.facebook.presto.operator.aggregation.AverageAggregations;
 import com.facebook.presto.operator.aggregation.BitwiseAndAggregation;

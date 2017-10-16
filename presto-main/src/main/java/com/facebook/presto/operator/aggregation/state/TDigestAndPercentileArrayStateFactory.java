@@ -144,10 +144,10 @@ public class TDigestAndPercentileArrayStateFactory
         public long getEstimatedSize()
         {
             long estimatedSize = INSTANCE_SIZE;
-            // TBD: To fix, could we get a proper memory estimation?
-            /*if (digest != null) {
+            if (digest != null) {
+                // TBD: To fix, could we get a proper memory estimation?
                 estimatedSize += 0; // digest.estimatedInMemorySizeInBytes();
-            }*/
+            }
             if (percentiles != null) {
                 estimatedSize += SizeOf.sizeOfDoubleArray(percentiles.size());
             }
