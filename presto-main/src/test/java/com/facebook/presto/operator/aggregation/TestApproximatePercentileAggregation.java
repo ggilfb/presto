@@ -479,8 +479,8 @@ public class TestApproximatePercentileAggregation
     @Test
     public void testPerformanceApproximatePercentile()
     {
-        final int sourceDataSize = 100_000_000;
-        final int iterations = 2;
+        final int sourceDataSize = 50_000_000;
+        final int iterations = 10;
         testApproxPercentilePerf(
                 DOUBLE_APPROXIMATE_PERCENTILE_ARRAY_AGGREGATION,
                 sourceDataSize,
@@ -490,8 +490,8 @@ public class TestApproximatePercentileAggregation
     @Test
     public void testPerformanceTDigestApproxPercentile()
     {
-        final int sourceDataSize = 100_000_000;
-        final int iterations = 2;
+        final int sourceDataSize = 50_000_000;
+        final int iterations = 10;
         testApproxPercentilePerf(
                 DOUBLE_APPROXIMATE_TDIGEST_PERCENTILE_ARRAY_AGGREGATION,
                 sourceDataSize,
