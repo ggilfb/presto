@@ -68,21 +68,25 @@ public final class ApproximateLongTDigestPercentileArrayAggregations
     @CombineFunction
     public static void combine(@AggregationState TDigestAndPercentileArrayState state, TDigestAndPercentileArrayState otherState)
     {
-        /*QuantileDigest otherDigest = otherState.getDigest();
-        QuantileDigest digest = state.getDigest();
+        // 20171027: We have to implement this, need to double check but my guess is that this is
+        //           needed when we get results back coming from other nodes.
 
+        TDigest otherDigest = otherState.getDigest();
+        TDigest digest = state.getDigest();
         if (digest == null) {
             state.setDigest(otherDigest);
-            state.addMemoryUsage(otherDigest.estimatedInMemorySizeInBytes());
+            // TODO: Fix memory estimation for digest
+            state.addMemoryUsage(0);
         }
         else {
-            state.addMemoryUsage(-digest.estimatedInMemorySizeInBytes());
-            digest.merge(otherDigest);
-            state.addMemoryUsage(digest.estimatedInMemorySizeInBytes());
+            state.addMemoryUsage(0);
+            digest.add(ImmutableList.of(otherDigest));
+            // What does it mean to "merge with another digest"
+            // digest.merge(otherDigest);
+            state.addMemoryUsage(0);
         }
 
-        state.setPercentiles(otherState.getPercentiles());*/
-        // TODO
+        state.setPercentiles(otherState.getPercentiles());
     }
 
     @OutputFunction("array(bigint)")
