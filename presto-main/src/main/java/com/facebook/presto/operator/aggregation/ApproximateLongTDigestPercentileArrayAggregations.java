@@ -67,6 +67,12 @@ public final class ApproximateLongTDigestPercentileArrayAggregations
     @CombineFunction
     public static void combine(@AggregationState TDigestAndPercentileArrayState state, TDigestAndPercentileArrayState otherState)
     {
+<<<<<<< HEAD
+=======
+        // 20171027: We have to implement this, need to double check but my guess is that this is
+        //           needed when we get results back coming from other nodes.
+
+>>>>>>> Implement combine, as when this is running, it is required when running in a cluster.
         TDigest otherDigest = otherState.getDigest();
         TDigest digest = state.getDigest();
         if (digest == null) {
@@ -77,6 +83,11 @@ public final class ApproximateLongTDigestPercentileArrayAggregations
         else {
             state.addMemoryUsage(0);
             digest.add(ImmutableList.of(otherDigest));
+<<<<<<< HEAD
+=======
+            // What does it mean to "merge with another digest"
+            // digest.merge(otherDigest);
+>>>>>>> Implement combine, as when this is running, it is required when running in a cluster.
             state.addMemoryUsage(0);
         }
 
