@@ -22,10 +22,7 @@ import com.facebook.presto.operator.aggregation.ApproximateDoubleTDigestPercenti
 import com.facebook.presto.operator.aggregation.ApproximateLongPercentileAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateLongPercentileArrayAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateLongTDigestPercentileAggregations;
-<<<<<<< HEAD
 import com.facebook.presto.operator.aggregation.ApproximateLongTDigestPercentileArrayAggregations;
-=======
->>>>>>> Add support for tdigest percentile for single values
 import com.facebook.presto.operator.aggregation.ApproximateRealPercentileAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateRealPercentileArrayAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateSetAggregation;

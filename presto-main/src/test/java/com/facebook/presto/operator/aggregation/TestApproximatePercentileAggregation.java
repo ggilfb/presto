@@ -479,18 +479,9 @@ public class TestApproximatePercentileAggregation
     @Test
     public void testPerformanceApproximatePercentile()
     {
-<<<<<<< HEAD
-<<<<<<< HEAD
         final int sourceDataSize = 50_000_000;
         final int iterations = 10;
-=======
-        final int sourceDataSize = 100_000_000;
-        final int iterations = 2;
->>>>>>> Work in progress - Add tdigest algorithm to calculate percentiles.
-=======
-        final int sourceDataSize = 50_000_000;
-        final int iterations = 10;
->>>>>>> Implement combine, as when this is running, it is required when running in a cluster.
+
         testApproxPercentilePerf(
                 DOUBLE_APPROXIMATE_PERCENTILE_ARRAY_AGGREGATION,
                 sourceDataSize,
@@ -502,10 +493,7 @@ public class TestApproximatePercentileAggregation
     {
         final int sourceDataSize = 50_000_000;
         final int iterations = 10;
-<<<<<<< HEAD
 
-=======
->>>>>>> Implement combine, as when this is running, it is required when running in a cluster.
         testApproxPercentilePerf(
                 DOUBLE_APPROXIMATE_TDIGEST_PERCENTILE_ARRAY_AGGREGATION,
                 sourceDataSize,
