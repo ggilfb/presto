@@ -17,8 +17,12 @@ import com.facebook.presto.block.BlockSerdeUtil;
 import com.facebook.presto.operator.aggregation.ApproximateCountDistinctAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateDoublePercentileAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateDoublePercentileArrayAggregations;
+import com.facebook.presto.operator.aggregation.ApproximateDoubleTDigestPercentileAggregations;
+import com.facebook.presto.operator.aggregation.ApproximateDoubleTDigestPercentileArrayAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateLongPercentileAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateLongPercentileArrayAggregations;
+import com.facebook.presto.operator.aggregation.ApproximateLongTDigestPercentileAggregations;
+import com.facebook.presto.operator.aggregation.ApproximateLongTDigestPercentileArrayAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateRealPercentileAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateRealPercentileArrayAggregations;
 import com.facebook.presto.operator.aggregation.ApproximateSetAggregation;
@@ -409,8 +413,12 @@ public class FunctionRegistry
                 .aggregates(CentralMomentsAggregation.class)
                 .aggregates(ApproximateLongPercentileAggregations.class)
                 .aggregates(ApproximateLongPercentileArrayAggregations.class)
+                .aggregates(ApproximateLongTDigestPercentileAggregations.class)
+                .aggregates(ApproximateLongTDigestPercentileArrayAggregations.class)
                 .aggregates(ApproximateDoublePercentileAggregations.class)
                 .aggregates(ApproximateDoublePercentileArrayAggregations.class)
+                .aggregates(ApproximateDoubleTDigestPercentileAggregations.class)
+                .aggregates(ApproximateDoubleTDigestPercentileArrayAggregations.class)
                 .aggregates(ApproximateRealPercentileAggregations.class)
                 .aggregates(ApproximateRealPercentileArrayAggregations.class)
                 .aggregates(CountIfAggregation.class)

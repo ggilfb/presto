@@ -22,6 +22,9 @@ import com.facebook.presto.spi.type.ArrayType;
 import com.google.common.collect.ImmutableList;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static com.facebook.presto.block.BlockAssertions.createBlockOfReals;
 import static com.facebook.presto.block.BlockAssertions.createDoubleSequenceBlock;
 import static com.facebook.presto.block.BlockAssertions.createDoublesBlock;
@@ -35,6 +38,8 @@ import static com.facebook.presto.spi.type.BigintType.BIGINT;
 import static com.facebook.presto.spi.type.DoubleType.DOUBLE;
 import static com.facebook.presto.spi.type.RealType.REAL;
 import static com.facebook.presto.spi.type.TypeSignature.parseTypeSignature;
+
+import static java.lang.String.format;
 
 public class TestApproximatePercentileAggregation
 {
@@ -80,6 +85,10 @@ public class TestApproximatePercentileAggregation
     private static final InternalAggregationFunction FLOAT_APPROXIMATE_PERCENTILE_ARRAY_WEIGHTED_AGGREGATION = metadata.getFunctionRegistry().getAggregateFunctionImplementation(
             new Signature("approx_percentile", AGGREGATE, new ArrayType(REAL).getTypeSignature(),
                     ImmutableList.of(REAL.getTypeSignature(), BIGINT.getTypeSignature(), new ArrayType(DOUBLE).getTypeSignature())));
+
+    // TODO: Let's test with TDigest
+    private static final InternalAggregationFunction DOUBLE_APPROXIMATE_TDIGEST_PERCENTILE_ARRAY_AGGREGATION = metadata.getFunctionRegistry().getAggregateFunctionImplementation(
+            new Signature("approx_tdigest_percentile", AGGREGATE, parseTypeSignature("array(double)"), DOUBLE.getTypeSignature(), parseTypeSignature("array(double)")));
 
     @Test
     public void testLongPartialStep()
@@ -461,6 +470,82 @@ public class TestApproximatePercentileAggregation
                 createDoublesBlock(1.0, 2.0, 3.0),
                 createLongsBlock(4L, 2L, 1L),
                 createRLEBlock(ImmutableList.of(0.5, 0.8), 3));
+    }
+
+    @Test
+    public void testPerformanceApproximatePercentile()
+    {
+        final int sourceDataSize = 10_000_000;
+        final int iterations = 10;
+
+        testApproxPercentilePerf(
+                DOUBLE_APPROXIMATE_PERCENTILE_ARRAY_AGGREGATION,
+                sourceDataSize,
+                iterations);
+    }
+
+    @Test
+    public void testPerformanceTDigestApproxPercentile()
+    {
+        final int sourceDataSize = 10_000_000;
+        final int iterations = 10;
+
+        testApproxPercentilePerf(
+                DOUBLE_APPROXIMATE_TDIGEST_PERCENTILE_ARRAY_AGGREGATION,
+                sourceDataSize,
+                iterations);
+    }
+
+    private static void testApproxPercentilePerf(InternalAggregationFunction function, int dataSize, int iterations)
+    {
+        List<Double> sourceData = new ArrayList<>();
+        for (int i = 0; i < dataSize; i++) {
+            sourceData.add((double)i + 1);
+        }
+
+        System.out.println("Start percentile calculation");
+        // TODO: Use the proper benchmarking framework
+        List<String> errors = new ArrayList<>();
+        List<Long> timings = new ArrayList<>();
+
+        for (int i = 0 ; i < iterations; i++) {
+            long start = System.currentTimeMillis();
+            try {
+                assertAggregation(
+                        function,
+                        ImmutableList.of(1, 2),
+                        createDoublesBlock(sourceData),
+                        createRLEBlock(ImmutableList.of(0.5, 0.99), dataSize));
+            }
+            catch (Throwable ex) {
+                // Do nothing, the result is not important, the timings are important...
+                errors.add(ex.toString());
+            }
+            finally {
+                // Record the timings
+                long elapsedTime = System.currentTimeMillis() - start;
+                timings.add(elapsedTime);
+                System.out.println(format("Elapsed time: %d", elapsedTime));
+            }
+        }
+        printResults(errors, timings);
+        System.out.println("End percentile calculation");
+    }
+
+    private static void printResults(List<String> errors, List<Long> timings)
+    {
+        for (int i = 0; i < errors.size(); i++)
+        {
+            String formattedError = errors.get(i);
+            formattedError = formattedError.substring(formattedError.indexOf("found") + 6);
+
+            System.out.println(
+                    format(
+                            "Iteration: %d, error: %s, timing: %d",
+                            i + 1,
+                            formattedError,
+                            timings.get(i)));
+        }
     }
 
     private static RunLengthEncodedBlock createRLEBlock(double percentile, int positionCount)
