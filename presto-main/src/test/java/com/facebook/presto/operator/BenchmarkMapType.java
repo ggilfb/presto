@@ -29,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(2)
 @Warmup(iterations = 10, time = 5000, timeUnit = TimeUnit.MILLISECONDS)
 @Measurement(iterations = 10, time = 5000, timeUnit = TimeUnit.MILLISECONDS)
-@BenchmarkMode(Mode.AverageTime)
+@BenchmarkMode(Mode.Throughput)
 public class BenchmarkMapType
 {
     private static final int MAP_COUNT = 100;
@@ -61,6 +61,25 @@ public class BenchmarkMapType
         return builder.build();
     }
 
+    /**
+     * Don't perform an additional transformation into an immutable map.
+     * This is for "testing only", to check out the overhead of "unmodifiable map" vs
+     * Leaving it the way that it is.
+     * @return
+     * @throws Throwable
+     */
+    @Benchmark
+    @OperationsPerInvocation(INTERNAL_ITERATIONS)
+    public Map<Object, Object> getSimpleMap()
+            throws Throwable
+    {
+        Map<Object, Object> map = new HashMap<>();
+        for (int j = 0; j < MAP_COUNT; j += 2) {
+            map.put(KEY_PREFIX + j, VALUE_PREFIX + (j + 1));
+        }
+        return map;
+    }
+
 
     public static void main(String[] args)
             throws Throwable
@@ -68,6 +87,7 @@ public class BenchmarkMapType
         // For testing: Just making sure functions are working
         new BenchmarkMapType().getCurrentMap();
         new BenchmarkMapType().getImmutableMap();
+        new BenchmarkMapType().getSimpleMap();
 
         Options options = new OptionsBuilder()
                 .verbosity(VerboseMode.NORMAL)
